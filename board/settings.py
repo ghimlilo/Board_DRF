@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'board.apps.user'
 ]
 
 MIDDLEWARE = [
@@ -164,17 +165,17 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
 )
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'project.permissions.UserPermission',
-#     ),
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'project.apps.user.backends.JWTAuthentication',
-#     ],
-#     'DEFAULT_RENDERER_CLASSES': [
-#         'rest_framework.renderers.JSONRenderer',
-#     ],
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'board.permissions.UserPermission',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'board.apps.user.authenticate.JWTAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+}
 
 SECRET_KEY = os.environ['SECRET_KEY']
 JWT_ALGORITHM = os.environ['JWT_ALGORITHM']
@@ -187,7 +188,7 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28)
 }
 
-# AUTH_USER_MODEL = 'board_user.User'
+AUTH_USER_MODEL = 'user.User'
 
 REST_USE_JWT = True
 ACCESS_TOKEN_EXPIRED = 60 * 60 * 24
