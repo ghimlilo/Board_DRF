@@ -45,10 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
-    'board.apps.user'
+    'board.apps.user',
+    'board.apps.postboard',
 ]
 
 MIDDLEWARE = [
@@ -175,6 +177,10 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
+    'DEFAULT_FILTER_BACKENDS' : [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+
 }
 
 SECRET_KEY = os.environ['SECRET_KEY']
