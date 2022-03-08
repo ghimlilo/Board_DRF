@@ -9,15 +9,15 @@ class Board(TimestampedModel):
     viewcount = models.IntegerField(blank=True, null=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
-    tag = models.ManyToManyField('tag', related_name='boards')
+    tag = models.ManyToManyField('Tag', related_name='boards')
 
     class Meta:
         db_table = 'boards'
 
 class Review(TimestampedModel):
     content = models.TextField(blank=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE)
-    board = models.ForeignKey('board', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+    board = models.ForeignKey('Board', on_delete=models.CASCADE)
     review_author = models.ForeignKey('user.User', on_delete=models.CASCADE)
 
     class Meta:
@@ -30,7 +30,7 @@ class Category(TimestampedModel):
         db_table = 'categories'
     
 class Tag(TimestampedModel):
-    name = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=50, blank=True, unique=True)
 
     class Meta:
         db_table = 'tags'

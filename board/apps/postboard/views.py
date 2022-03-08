@@ -28,3 +28,25 @@ class BoardListCreateAPIView(generics.ListCreateAPIView):
 class BoardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+
+
+class ReviewCreateAPIView(generics.CreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+    def perform_create(self, serializer):
+        board_pk = self.kwargs.get("board_pk")
+        board = get_object_or_404(Board, pk=board_pk)
+
+        #parent id 저장
+
+        review_author = self.request.user
+
+        review_queryset = Review.objects.filter(board=board, review_author=review_author)
+        
+        if review_queryset.exists:
+            raise ValidationError("You have already reviewed this content.")
+
+        serializer.save(board=board, review_author=review_author)
+
+#reviewdetail
