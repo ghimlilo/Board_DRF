@@ -1,6 +1,6 @@
 from urllib import request
 from rest_framework import serializers
-from .models   import Board, Review, Tag
+from .models   import Board, Review, Tag, BoardTag
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -48,9 +48,9 @@ class BoardSerializer(serializers.ModelSerializer):
         for tag in tags:
             obj, created = Tag.objects.get_or_create(
                 name=tag,
-                # defaults={'name':tag}
+                defaults={'name':tag}
             )
-            # Tag.objects.get_or_create(name=obj, board=board)
+            BoardTag.objects.get_or_create(tag=obj, board=board)
         
         board.save()
         return board
