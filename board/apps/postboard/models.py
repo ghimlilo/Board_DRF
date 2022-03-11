@@ -9,7 +9,7 @@ class Board(TimestampedModel):
     viewcount = models.IntegerField(blank=True, null=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
-    tag = models.ManyToManyField('Tag', related_name='boards')
+    tag = models.ManyToManyField('Tag', through='BoardTag', related_name='boards')
 
     class Meta:
         db_table = 'boards'
@@ -34,6 +34,14 @@ class Tag(TimestampedModel):
 
     class Meta:
         db_table = 'tags'
+    
+    def __str__(self):
+        return self.name
+
+class BoardTag(models.Model):
+    tag = models.ForeignKey('Tag', on_delete=models.CASCADE)
+    board = models.ForeignKey('Board', on_delete=models.CASCADE)
+
     
 
 

@@ -48,5 +48,6 @@ class ReviewCreateAPIView(generics.CreateAPIView):
             raise ValidationError("You have already reviewed this content.")
 
         serializer.save(board=board, review_author=review_author)
+        
 
 #reviewdetail
