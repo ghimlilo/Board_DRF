@@ -180,7 +180,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS' : [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
-
+    'TEST_REQUEST_DEFAULT_FORMAT' : 'json'
 }
 
 SECRET_KEY = os.environ['SECRET_KEY']
@@ -192,6 +192,16 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28)
+}
+
+CACHE = {
+    "default" : {
+        "BACKEND" : "django_redis.cache.RedisCache",
+        "LOCATION" : "redis://127.0.0.1:6379/1",
+        "OPTION" : {
+            "CLIENT_CLASS" : "django_redis.client.DefaultClient",
+        }
+    }
 }
 
 AUTH_USER_MODEL = 'user.User'

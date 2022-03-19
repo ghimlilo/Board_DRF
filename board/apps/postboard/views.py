@@ -1,4 +1,6 @@
+from os import set_inheritable
 from django_filters.rest_framework import DjangoFilterBackend
+from django.core.cache import cache
 from rest_framework import filters
 from rest_framework import generics 
 from rest_framework import permissions
