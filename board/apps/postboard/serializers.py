@@ -42,6 +42,7 @@ class BoardSerializer(serializers.ModelSerializer):
         fields = "__all__"
     
     def create(self, validated_data):
+    
         tags = validated_data.pop('tag')
         board = self.Meta.model.objects.create(**validated_data)
         
