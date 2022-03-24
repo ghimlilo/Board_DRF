@@ -16,8 +16,8 @@ class Board(TimestampedModel):
 
 class Review(TimestampedModel):
     content = models.TextField(blank=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
-    board = models.ForeignKey('Board', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='reply')
+    board = models.ForeignKey('Board', on_delete=models.CASCADE, related_name='reviews')
     review_author = models.ForeignKey('user.User', on_delete=models.CASCADE)
 
     class Meta:
