@@ -1,15 +1,26 @@
 from urllib import request
 from rest_framework import serializers
+
+import board
 from .models   import Board, Review, Tag, BoardTag
 
 
 class ReviewSerializer(serializers.ModelSerializer):
 
     review_author = serializers.StringRelatedField(read_only=True)
+    reply = serializers.SerializerMethodField()
+    
+    def get_reply(self, instance):
+        serializer = self.__class__(instance.reply, many=True)
+        serializer.bind('', self)
+        return serializer.data
 
     class Meta:
         model = Review
-        fields = "__all__"
+        fields = ('id', 'review_author', 'parent', 'content', 'reply')
+        # exclude = ("board",)
+        read_only_fields = ['review_author']
+    
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -31,7 +42,8 @@ class BoardSerializer(serializers.ModelSerializer):
     #viewcount
     
     user = serializers.StringRelatedField(read_only=True)
-    reviews = ReviewSerializer(many=True, read_only=True)
+    reviews = ReviewSerializer(many=True, read_only=True) 
+    #related_name이 없으면 안 들어감?
     tag = CreatableSlugRelatedField(
                                         many=True,
                                         queryset=Tag.objects.all(), 
