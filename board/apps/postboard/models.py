@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class Board(TimestampedModel):
     title = models.CharField(max_length=140)
     content = models.CharField(max_length=60)
-    viewcount = models.IntegerField(blank=True, null=True)
+    viewcount = models.IntegerField(null=True, default=0)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
     tag = models.ManyToManyField('Tag', through='BoardTag', related_name='boards')
