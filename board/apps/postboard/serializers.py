@@ -39,16 +39,14 @@ class CreatableSlugRelatedField(serializers.SlugRelatedField):
 
 
 class BoardSerializer(serializers.ModelSerializer):
-    #viewcount
     
     user = serializers.StringRelatedField(read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True) 
-    #related_name이 없으면 안 들어감?
     tag = CreatableSlugRelatedField(
-                                        many=True,
-                                        queryset=Tag.objects.all(), 
-                                        slug_field="name"
-                                    )
+                                    many=True,
+                                    queryset=Tag.objects.all(), 
+                                    slug_field="name"
+                                )
     class Meta:
         model = Board
         fields = "__all__"

@@ -12,12 +12,13 @@ from rest_framework.generics import get_object_or_404
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
+from .pagination  import SmallSetPagination
 
 
 from board.apps.postboard.models import Board, Review
 from board.apps.postboard.serializers import BoardSerializer, ReviewSerializer
 from board.apps.user import serializers
-#pagination
+
 
 
 class BoardListCreateAPIView(generics.ListCreateAPIView):
@@ -65,9 +66,10 @@ class BoardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         return response
 
 
-class ReviewCreateAPIView(generics.CreateAPIView):
+class ReviewCreateAPIView(generics.ListCreateAPIView):
     queryset = Review.objects.all().order_by("-id")
     serializer_class = ReviewSerializer
+    pagination_class = SmallSetPagination
 
     def perform_create(self, serializer):
         board_pk = self.kwargs.get("board_pk")
@@ -86,4 +88,5 @@ class ReviewCreateAPIView(generics.CreateAPIView):
 class ReviewDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all().order_by("-id")
     serializer_class = ReviewSerializer
+    pagination_class = SmallSetPagination
     
