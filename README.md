@@ -15,7 +15,7 @@ DRF를 활용한 게시물 등록 API 개발 중
 - DRF, mysql
 <br>
 
-### 구현 API(진행중)
+### 구현 API
 
 1. User
   - 회원가입
