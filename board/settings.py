@@ -194,15 +194,18 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28)
 }
 
-CACHE = {
+CACHES = {
     "default" : {
         "BACKEND" : "django_redis.cache.RedisCache",
         "LOCATION" : "redis://127.0.0.1:6379/1",
-        "OPTION" : {
+        "OPTIONS" : {
             "CLIENT_CLASS" : "django_redis.client.DefaultClient",
         }
     }
 }
+# SESSION_ENGINE = "django.contrib.sessions.beckends.cache"
+# SESSION_CACHE_ALIAS = "default"
+CACHE_TTL = 300
 
 AUTH_USER_MODEL = 'user.User'
 
