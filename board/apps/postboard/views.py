@@ -1,5 +1,9 @@
 import datetime
 
+from django.utils.decorators import method_decorator    
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
+
 from django_filters.rest_framework import DjangoFilterBackend
 from django.core.cache import cache
 from django.db import transaction
@@ -12,6 +16,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
+
+import board
 from .pagination  import SmallSetPagination
 
 
@@ -26,10 +32,26 @@ class BoardListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = BoardSerializer
     filter_backends = [filters.SearchFilter]
     search_fields  = ['category__name', 'tag__name']
+    permission_classes = (AllowAny,) #test
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+    
+    # def get(self, request, *args, **kwargs):
+    #     board = cache.get_or_set('board', self.get_queryset(), 60*10)
+    #     serializer = BoardSerializer(board, many=True)
+    #     return Response(serializer.data)
 
+    @method_decorator(vary_on_cookie)
+    @method_decorator(cache_page(60*60))
+    def dispatch(self, request, *args, **kwargs):
+        res = cache.get('board')
+        if res:
+            return res
+        res = super().dispatch(request, *args, **kwargs)
+        res.render()
+        cache.set('board', res, 60)
+        return res
     
 class BoardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
