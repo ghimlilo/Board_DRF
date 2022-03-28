@@ -9,6 +9,7 @@ DRF를 활용한 게시물 등록 API 개발 중
     - 게시글 view counting
 2. Rest API 설계
 3. Unit Test
+4. redis 적용하여 loadtest
 <br>
 
 ### 사용기술
