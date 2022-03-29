@@ -41,7 +41,16 @@ class CreatableSlugRelatedField(serializers.SlugRelatedField):
 class BoardSerializer(serializers.ModelSerializer):
     
     user = serializers.StringRelatedField(read_only=True)
-    reviews = ReviewSerializer(many=True, read_only=True) 
+    reviews = ReviewSerializer(many=True, read_only=True)
+    # reviews = serializers.SerializerMethodField()
+
+    # def get_reviews(self, instance):
+    #     try:
+    #         reviews = Review.objects.filter(board = instance.id)
+    #         return [ReviewSerializer(review).data for review in reviews]
+    #     except Review.DoesNotExist:
+    #         return None
+    
     tag = CreatableSlugRelatedField(
                                     many=True,
                                     queryset=Tag.objects.all(), 
