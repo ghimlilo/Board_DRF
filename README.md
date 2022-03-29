@@ -26,6 +26,11 @@ DRF를 활용한 게시물 등록 API 개발 중
 2. Board
   - 게시물 CRUD
   - 게시물 검색 : 카테고리 이름, 태그 이름 
+  - cookie 활용하여 조회수 증가 방지 
+
+3. Review
+  - 댓글 & 대댓글
+  - pagination
 
 
 ### UnitTests(진행중)
