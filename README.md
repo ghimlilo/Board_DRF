@@ -31,7 +31,8 @@ DRF를 활용한 게시물 등록 API 개발 중
 ### UnitTests(진행중)
 1. Board 
   - 게시물 CRUD
-
+2. Review
+  - 댓글 CRUD
 
 <br>
 
