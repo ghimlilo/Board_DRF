@@ -56,7 +56,7 @@ class BoardListCreateAPIView(generics.ListCreateAPIView):
 class BoardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
-    # permission_classes = (AllowAny,)
+    permission_classes = (AllowAny,)
 
     def retrieve(self, request, pk):
         instance = get_object_or_404(self.get_queryset(), pk=pk)
