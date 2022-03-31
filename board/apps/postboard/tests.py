@@ -207,3 +207,101 @@ class ReviewCreateViewTestCase(APITestCase):
         # headers = {"HTTP_Authorization" : f"Bearer ${access_token}"}
         response = self.client.post('/api/postboard/board/1/review', json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+class ReviewDetailViewTestCase(APITestCase):
+
+    time_test_now = timezone.now() - datetime.timedelta(days=1)    
+
+    @mock.patch("django.utils.timezone.now")
+    def setUp(self, mock_now):
+
+        mock_now.return_value = self.time_test_now
+
+        self.user = User.objects.create(
+                            email = "kimlilo@gmail.com",
+                            account_name = "킴릴로"
+                            )
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+        Category.objects.create(
+                            id = 1,
+                            name = "z"
+        )
+
+        Board.objects.create(
+            id = 1,
+            user = self.user,
+            title = "c",
+            content = "d",
+            category = Category.objects.get(id=1),       
+        )       
+
+        Tag.objects.create(
+            id = 1,
+            name = "a"
+        )
+
+        Tag.objects.create(
+            id = 2,
+            name = "b",
+        )
+        
+        BoardTag.objects.create(
+            id = 1,
+            tag = Tag.objects.get(id=1),
+            board = Board.objects.get(id=1),
+        )
+
+        BoardTag.objects.create(
+            id = 2,
+            tag = Tag.objects.get(id=2),
+            board = Board.objects.get(id=1),
+        )
+
+        Review.objects.create(
+            id = 1,
+            content = "review",
+            board = Board.objects.get(id=1),
+            review_author = self.user,
+        )
+
+        Review.objects.create(
+            id = 2,
+            content = "reply",
+            board = Board.objects.get(id=1),
+            review_author = self.user,
+            parent = Review.objects.get(id=1),
+        )
+
+
+    def tearDown(self):
+        User.objects.all().delete()
+        Category.objects.all().delete()
+        BoardTag.objects.all().delete()
+        Tag.objects.all().delete()
+        Board.objects.all().delete()
+        Review.objects.all().delete()
+
+    def test_get_review_success(self):
+        
+        # access_token = jwt.encode({'id':1}, SECRET_KEY, JWT_ALGORITHM)  
+        # headers = {"HTTP_Authorization" : f"Bearer ${access_token}"}
+        response = self.client.get('/api/postboard/review/1')
+        self.assertEqual(response.json(),
+            {
+                "id" : 1,
+                "review_author" : "킴릴로",
+                "content" : "review",
+                "parent" : None,
+                "reply" : [
+                    {
+                        "id" : 2,
+                        "review_author" : "킴릴로",
+                        "parent" : 1,
+                        "content" : "reply",
+                        "reply" : []
+                    }
+                ]
+            }
+        )
